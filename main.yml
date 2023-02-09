@@ -1,0 +1,23 @@
+---
+- name: Clean up VPCs
+  hosts: localhost
+  tasks:
+    - name: Ensure installer directory
+      ansible.builtin.file:
+        path: /tmp/installer
+        state: directory
+        mode: '0755'
+
+    - name: Fetch the installer
+      ansible.builtin.include_tasks:
+        file: installer-{{ ansible_facts['system'] }}.yml
+      vars:
+        destination: /tmp/installer
+
+    - name: Delete the things
+      ansible.builtin.include_tasks:
+        file: delete.yml
+      vars:
+        region: "{{ item[0].region }}"
+        vpc_name: "{{ item[1] | regex_replace('-vpc$', '') }}"
+      loop: "{{ vpcs_to_remove | subelements('vpcs') }}"

@@ -1,0 +1,8 @@
+vpcs_to_remove:
+  - region: us-east-1
+    vpcs:
+      - foo-vpc
+      - bar-vpc
+  - region: us-east-2
+    vpcs:
+      - baz-vpc

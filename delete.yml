@@ -1,0 +1,24 @@
+---
+- name: Ensure metadata directory
+  ansible.builtin.file:
+    path: /tmp/installer/{{ vpc_name }}
+    state: directory
+    mode: 0755
+
+- name: Generate metadata.json
+  ansible.builtin.template:
+    src: metadata.json.j2
+    dest: /tmp/installer/{{ vpc_name }}/metadata.json
+    mode: 0644
+  vars:
+    cluster_name: "{{ vpc_name }}"
+    region: "{{ region }}"
+
+- name: Run cluster destroy
+  ansible.builtin.command:
+    cmd: /tmp/installer/openshift-install destroy cluster --dir=/tmp/installer/{{ vpc_name }}
+
+- name: Delete metadata directory
+  ansible.builtin.file:
+    path: /tmp/installer/{{ vpc_name }}
+    state: absent
