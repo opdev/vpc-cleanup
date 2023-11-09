@@ -13,3 +13,8 @@ vpcs_to_remove:
     vpcs:
       - baz-vpc
 ```
+
+Running locally 
+```shell
+ansible-playbook main.yml -e @extravars-sample.yml
+```
